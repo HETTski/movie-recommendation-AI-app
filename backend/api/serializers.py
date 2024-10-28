@@ -24,3 +24,8 @@ class MovieSerializer(serializers.ModelSerializer):
 class AddMovieSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=255)
     description = serializers.CharField(allow_blank=True, required=False)
+    sites = serializers.ListField(
+        child=serializers.URLField(),  # Umożliwienie dodawania listy URL-i
+        allow_empty=True,  # Zezwolenie na pustą listę
+        required=False  # Pole nie jest obowiązkowe
+    )

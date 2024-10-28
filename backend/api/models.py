@@ -38,6 +38,7 @@ class CustomUser(AbstractBaseUser):
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
+    sites = ArrayField(models.URLField(), blank=True, default=list)
 
     class Meta:
         db_table = 'movies'  # Ustaw nazwę tabeli na 'movies'

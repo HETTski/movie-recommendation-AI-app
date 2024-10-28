@@ -31,9 +31,7 @@ class UserMoviesView(generics.ListAPIView):
 class AddUserMovieView(APIView):
     permission_classes = [IsAuthenticated]
     
-
     def post(self, request):
-        print(f"Request data: {request.data}")  # Dodaj to dla debugowania
         user = request.user
         movie_data = request.data
 
@@ -44,7 +42,10 @@ class AddUserMovieView(APIView):
         # Sprawdzenie, czy film o podanej nazwie już istnieje
         movie, created = Movie.objects.get_or_create(
             title=movie_data['title'],
-            defaults={'description': movie_data.get('description', '')}
+            defaults={
+                'description': movie_data.get('description', ''),
+                'sites': movie_data.get('sites', [])
+            }
         )
 
         # Dodanie ID filmu do pola `movies` użytkownika, jeśli go tam jeszcze nie ma
