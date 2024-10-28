@@ -1,6 +1,6 @@
 #from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Movie
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
             movies=[],
         )
         return user
+
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'description', 'sites']
+
+class AddMovieSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=255)
+    description = serializers.CharField(allow_blank=True, required=False)
