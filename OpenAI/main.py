@@ -1,5 +1,3 @@
-# main.py
-
 import requests
 import openai
 from config import TMDB_API_KEY, OPENAI_API_KEY
@@ -7,18 +5,38 @@ from config import TMDB_API_KEY, OPENAI_API_KEY
 # Configure OpenAI API
 openai.api_key = OPENAI_API_KEY
 
+# Dictionary of genre names to TMDb genre IDs
+GENRE_IDS = {
+    "action": 28,
+    "adventure": 12,
+    "animation": 16,
+    "comedy": 35,
+    "crime": 80,
+    "documentary": 99,
+    "drama": 18,
+    "family": 10751,
+    "fantasy": 14,
+    "history": 36,
+    "horror": 27,
+    "music": 10402,
+    "mystery": 9648,
+    "romance": 10749,
+    "science fiction": 878,
+    "tv movie": 10770,
+    "thriller": 53,
+    "war": 10752,
+    "western": 37
+}
+
 def get_movie_recommendations(genres):
     """
     Function to get movie recommendations based on genres.
     """
-    # Request to TMDb
-    url = f"https://api.themoviedb.org/3/discover/movie?api_key={TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&with_genres={genres}"
-    print(f"Sending request to TMDb: {url}")
-    
+    genre_ids = ",".join(map(str, genres))
+    url = f"https://api.themoviedb.org/3/discover/movie?api_key={TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&with_genres={genre_ids}"
     response = requests.get(url)
     if response.status_code == 200:
         movies = response.json().get("results", [])
-        print(f"Number of movies found: {len(movies)}")
         return movies
     else:
         print(f"Error {response.status_code} when sending request to TMDb")
@@ -29,12 +47,9 @@ def get_now_playing_movies():
     Function to get movies currently playing in theaters.
     """
     url = f"https://api.themoviedb.org/3/movie/now_playing?api_key={TMDB_API_KEY}&language=en-US"
-    print(f"Sending request to TMDb: {url}")
-    
     response = requests.get(url)
     if response.status_code == 200:
         movies = response.json().get("results", [])
-        print(f"Number of movies found: {len(movies)}")
         return movies
     else:
         print(f"Error {response.status_code} when sending request to TMDb")
@@ -52,7 +67,7 @@ def generate_gpt_response(prompt):
     Function to generate chatbot response using GPT.
     """
     response = openai.ChatCompletion.create(
-        model="gpt-4",  # Choose the appropriate model
+        model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
@@ -61,7 +76,7 @@ def generate_gpt_response(prompt):
     )
     return response['choices'][0]['message']['content'].strip()
 
-def chatbot_conversation(user_input):
+def chatbot_conversation(user_input, show_now_playing=False):
     """
     Main function that conducts a conversation with the user.
     """
@@ -70,43 +85,46 @@ def chatbot_conversation(user_input):
     gpt_response = generate_gpt_response(prompt)
     print(f"GPT response: {gpt_response}")
     
-    # Step 2: Determine if the user wants to watch something currently playing or older
-    now_playing = "now playing" in user_input.lower() or "in theaters" in user_input.lower()
-    
-    # Step 3: Get movie genres (may require processing by GPT)
+    # Step 2: Get movie genres from user input
     genres = []
-    if "action" in user_input.lower():
-        genres.append(28)  # Example: Genre ID for 'action' in TMDb
-    if "comedy" in user_input.lower():
-        genres.append(35)  # Example: Genre ID for 'comedy' in TMDb
-    if "drama" in user_input.lower():
-        genres.append(18)  # Example: Genre ID for 'drama' in TMDb
-    # Add more genres as needed
+    for genre_name, genre_id in GENRE_IDS.items():
+        if genre_name in user_input.lower():
+            genres.append(genre_id)
 
-    # Step 4: Get movies based on now playing or popular categories
-    if now_playing:
-        # Fetch movies that are currently playing in theaters
-        movies = get_now_playing_movies()
-        # Filter movies by genres, if any genres were specified
-        if genres:
-            movies = filter_movies_by_genre(movies, genres)
-    else:
-        # Fetch popular movies by specified genres if not looking for "now playing"
-        genre_ids = ",".join(map(str, genres))
-        movies = get_movie_recommendations(genre_ids)
+    recommendations = ""
     
-    # Step 5: Generate recommendations for the user
-    if movies:
-        recommendations = "\n".join([f"{movie['title']} - {movie['overview'][:100]}..." for movie in movies[:5]])
-        final_response = f"Here are some movies you might like:\n{recommendations}"
-    else:
-        final_response = "Unfortunately, I couldn't find any movies matching your preferences."
+    # Step 3: Show "Now Playing" movies if requested
+    if show_now_playing:
+        now_playing_movies = get_now_playing_movies()
+        if genres:
+            now_playing_movies = filter_movies_by_genre(now_playing_movies, genres)
+        if now_playing_movies:
+            recommendations += "Here are some movies currently playing in theaters:\n"
+            recommendations += "\n".join([f"{movie['title']} - {movie['overview'][:100]}..." for movie in now_playing_movies[:5]])
+            recommendations += "\n\n"
+        else:
+            recommendations += "No 'now playing' movies match your genre preferences.\n\n"
 
-    return final_response
+    # Step 4: Show popular movies based on specified genres
+    if genres:
+        genre_based_movies = get_movie_recommendations(genres)
+        if genre_based_movies:
+            recommendations += "Here are some popular movies based on your genre preferences:\n"
+            recommendations += "\n".join([f"{movie['title']} - {movie['overview'][:100]}..." for movie in genre_based_movies[:5]])
+        else:
+            recommendations += "No popular movies match your genre preferences."
+    else:
+        # Fallback if no genres were specified
+        recommendations += "Please specify some genres to get popular movie recommendations."
+
+    return recommendations
 
 
 # Example conversation
 if __name__ == "__main__":
     user_input = input("Enter your movie preferences: ")
-    chatbot_response = chatbot_conversation(user_input)
+    now_playing_choice = input("Do you want to see movies that are now playing in theaters? (yes/no): ").strip().lower()
+    show_now_playing = now_playing_choice == "yes"
+    
+    chatbot_response = chatbot_conversation(user_input, show_now_playing=show_now_playing)
     print("Chatbot:", chatbot_response)
