@@ -28,6 +28,6 @@ urlpatterns = [
     path('api/user/movies/', UserMoviesView.as_view(), name='user-movies'),
     path("api-auth/", include("rest_framework.urls")),
     path('api/user/movies/add/', AddUserMovieView.as_view(), name='add-user-movie'),
-    path('api/movie/recommendations/', RecommendationView.as_view(), name='movie-recommendations'),
-    path('api/movie/recommendations2/', MovieRecommendationView.as_view(), name='movie-recommendations2'),
+    #path('api/movie/recommendations/', RecommendationView.as_view(), name='movie-recommendations'),
+    path('api/movies/recommendations/', MovieRecommendationView.as_view(), name='movie-recommendations'),
 ]

@@ -84,6 +84,8 @@ class MovieRecommendationView(APIView):
     permission_classes = [AllowAny]  # Allow all users, anonymous or authenticated
 
     def post(self, request):
+        use_movie_db = request.data.get('use_db', False)
+
         if request.user.is_authenticated:
             movie_ids = request.user.movies
             if movie_ids:
@@ -93,11 +95,16 @@ class MovieRecommendationView(APIView):
                     watched_movies.append(m.title)
         else:
             watched_movies = request.data.get('watched_movies', [])
+            if(len(watched_movies)):
+                use_movie_db = True
         query = request.data.get('query', "Can you recommend a movie for me?")
         
         # Build the initial conversation context
-        conversation_context = f"Based on the movies {watched_movies}, recommend some similar movies. {query}"
-        
+        if(use_movie_db):
+            conversation_context = f"Based on the movies {watched_movies}, recommend some similar movies. {query}"
+        else:
+            conversation_context = f"Recommend some movies. {query}"
+
         # Call the conversational function instead
         response = chatbot_conversation(conversation_context)
         
