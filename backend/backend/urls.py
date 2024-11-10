@@ -30,4 +30,6 @@ urlpatterns = [
     path('api/user/movies/add/', AddUserMovieView.as_view(), name='add-user-movie'),
     #path('api/movie/recommendations/', RecommendationView.as_view(), name='movie-recommendations'),
     path('api/movies/recommendations/', MovieRecommendationView.as_view(), name='movie-recommendations'),
+    path('api/recommend-movies/', MovieRecommendationView.as_view(), name='recommend-movies'),
 ]
+
