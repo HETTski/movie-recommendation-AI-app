@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.views import CreateUserView, UserMoviesView, AddUserMovieView
+from api.views import CreateUserView, UserMoviesView, AddUserMovieView, MovieRecommendationView, RecommendationView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -28,4 +28,6 @@ urlpatterns = [
     path('api/user/movies/', UserMoviesView.as_view(), name='user-movies'),
     path("api-auth/", include("rest_framework.urls")),
     path('api/user/movies/add/', AddUserMovieView.as_view(), name='add-user-movie'),
+    #path('api/movie/recommendations/', RecommendationView.as_view(), name='movie-recommendations'),
+    path('api/movies/recommendations/', MovieRecommendationView.as_view(), name='movie-recommendations'),
 ]

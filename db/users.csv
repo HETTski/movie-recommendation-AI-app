@@ -1,0 +1,10 @@
+1,test,pbkdf2_sha256$870000$ltpH59qe0LrGuQn9uLYQf7$rrUzC5FIFW9zy8F4TknHEUiRcS/O0PRi9Y3p46WwnsM=,test@test.te,,
+2,test2,pbkdf2_sha256$870000$ltpH59qe0LrGuQn9uLYQf7$rrUzC5FIFW9zy8F4TknHEUiRcS/O0PRi9Y3p46WwnsM=,test2@test.te,,
+3,test3,pbkdf2_sha256$870000$ltpH59qe0LrGuQn9uLYQf7$rrUzC5FIFW9zy8F4TknHEUiRcS/O0PRi9Y3p46WwnsM=,test3@test.te,,
+8,test7,pbkdf2_sha256$870000$0KnMnKHJFpO3sbQbbnCp6C$kIstViQQP2WkkAOcabzgnYTD+pTLMyGusGRgpNiVNvQ=,,{},
+5,test4,pbkdf2_sha256$870000$LcIoOZoRC2JIuVchay9dQB$1XUecRiSdMjobBGeFqcjBUJ1mwFgIHKUPO7f60RUyp8=,,{},
+6,test5,pbkdf2_sha256$870000$e9nDxK596PsZqXZXEh7fTa$CDbZd8KB0i4bxUVtuRQSIA4pbNa/pPhXMSLvr0RZBqc=,,{},
+7,test6,pbkdf2_sha256$870000$O8pE6BShuzVoE2vvZnjlVp$kNvgoANAkXWZh4ld3KMbFMPCgFH+wEdLoDvj533V3Jg=,,{},
+9,test8,pbkdf2_sha256$870000$SqOFc2XrO7EhowF5LPuyjT$8hB5O/Twh3UUTtJX7VAps8Knu/dTa1U4r2V/ISuIP3U=,,{6},
+4,kmr,pbkdf2_sha256$870000$ltpH59qe0LrGuQn9uLYQf7$rrUzC5FIFW9zy8F4TknHEUiRcS/O0PRi9Y3p46WwnsM=,,"{5,6,7}",2024-10-28
+10,test10,pbkdf2_sha256$870000$jzJLhYUZNSTWZmO74OL9fD$2LRpQ+WvRgU0eE/67X8Ovue/68c0Mc1ZKDH+cXXk3Hs=,,{7},

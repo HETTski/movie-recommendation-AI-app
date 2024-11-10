@@ -58,6 +58,7 @@ This API uses JSON Web Tokens (JWT) for authentication. You can obtain a token b
 - Obtain a token by logging in at ```/api/token/get```.
 - Use the token to add movies to the user's collection via ```/api/user/movies/add/```.
 - View the user's movie collection at ```/api/user/movies/```.
+- View for recommendation ```/api/movies/recommendations/```.
 
 ## API Endpoints
 
@@ -69,6 +70,8 @@ This API uses JSON Web Tokens (JWT) for authentication. You can obtain a token b
 ### Movie Endpoints
 - GET ```/api/user/movies/```: Retrieve the current user's movie list.
 - POST ```/api/user/movies/add/```: Add a movie to the current user's movie list.
+- POST ```/api/movies/recommendations/```: Search new movies for all users or for auth users. Additional may use your movies db.
+
 Sample JSON for Adding a Movie
 ```
 {
@@ -80,6 +83,29 @@ Sample JSON for Adding a Movie
   ]
 }
 ```
+
+Sample JSON for Recommend Movies:
+```
+{
+  "query": "Recommend sci-fi movies",
+  "watched_movies": ["Interstellar", "Matrix"]
+}
+```
+Optional
+```
+{
+  "query": "Recommend sci-fi movies",
+  "watched_movies": ["Interstellar", "Matrix"]
+}
+```
+For Auth users:
+```
+{
+  "query": "Recommend sci-fi movies",
+  "use_db": true
+}
+```
+
 ## Authentication
 For authenticated routes, use the token in the Authorization header:
 
@@ -92,3 +118,4 @@ Authorization: Bearer your_jwt_token
 - Database: PostgreSQL (with ArrayField for storing multiple URLs)
 - Authentication: JWT (using django-rest-framework-simplejwt)
 - Environment: Python 3
+- AI: OpenAI (for movies recommendations)

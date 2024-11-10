@@ -6,6 +6,7 @@ from .serializers import UserSerializer, MovieSerializer, AddMovieSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from OpenAI.main import get_movie_recommendations, chatbot_conversation
 
 # Create your views here.
 class CreateUserView(generics.ListCreateAPIView):
@@ -61,3 +62,51 @@ class AddUserMovieView(APIView):
             },
             status=status.HTTP_200_OK if not created else status.HTTP_201_CREATED
         )
+
+class RecommendationView(APIView):
+    permission_classes = [AllowAny]  # Allow all users, anonymous or authenticated
+
+    def post(self, request):
+        genres = request.data.get("genres", [])
+        
+        if request.user.is_authenticated:
+            watched_movies = request.user.movies  # List of movie IDs the user has watched
+            recommendations = get_movie_recommendations(genres=genres, exclude_ids=watched_movies)
+        else:
+            recommendations = get_movie_recommendations(genres=genres)
+        
+        return Response(
+            {"recommendations": recommendations},
+            status=status.HTTP_200_OK
+        )
+
+class MovieRecommendationView(APIView):
+    permission_classes = [AllowAny]  # Allow all users, anonymous or authenticated
+
+    def post(self, request):
+        use_movie_db = request.data.get('use_db', False)
+
+        if request.user.is_authenticated:
+            movie_ids = request.user.movies
+            if movie_ids:
+                watched_movies = []  # List of movie IDs the user has watched
+                moviesArray = Movie.objects.filter(id__in=movie_ids)
+                for m in moviesArray:
+                    watched_movies.append(m.title)
+        else:
+            watched_movies = request.data.get('watched_movies', [])
+            if(len(watched_movies)):
+                use_movie_db = True
+        query = request.data.get('query', "Can you recommend a movie for me?")
+        
+        # Build the initial conversation context
+        if(use_movie_db):
+            conversation_context = f"Based on the movies {watched_movies}, recommend some similar movies. {query}"
+        else:
+            conversation_context = f"Recommend some movies. {query}"
+
+        # Call the conversational function instead
+        response = chatbot_conversation(conversation_context)
+        
+        return Response({"recommendations": response}, status=200)
+   
