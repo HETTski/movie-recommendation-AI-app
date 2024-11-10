@@ -17,6 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class MovieSerializer(serializers.ModelSerializer):
+    sites = serializers.ListField(child=serializers.URLField())
+
     class Meta:
         model = Movie
         fields = ['id', 'title', 'description', 'sites']
@@ -27,5 +29,6 @@ class AddMovieSerializer(serializers.Serializer):
     sites = serializers.ListField(
         child=serializers.URLField(),  # Umożliwienie dodawania listy URL-i
         allow_empty=True,  # Zezwolenie na pustą listę
-        required=False  # Pole nie jest obowiązkowe
+        required=False,  # Pole nie jest obowiązkowe
+        default=list
     )
