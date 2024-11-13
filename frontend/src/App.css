@@ -1,0 +1,128 @@
+.App {
+  text-align: center;
+  display: flex;
+  height: 100vh;
+  background-color: #1C1C17;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* src/App.css */
+.chat-container {
+  width: 60%;
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.chat-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.message {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message.user {
+  background-color: #DCBE55;
+  text-align: right;
+  color: #1C1C17;
+}
+
+.message.bot {
+  background-color: #F5EEDC;
+  text-align: left;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #9F0303;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #571313;
+}
+
+.messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.input-container {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
