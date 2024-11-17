@@ -7,7 +7,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  // Funkcja do wysyłania wiadomości
+  // Function to send messages
   const handleSend = async () => {
     if (input.trim() === '') return;
 
@@ -16,12 +16,12 @@ const Chat = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/chat', {
-        message: input, // Wiadomość od użytkownika
-        show_now_playing: false, // Możesz ustawić na true, jeśli chcesz pokazać filmy teraz grające
+        message: input, // User message
+        show_now_playing: false, // Set to true if you want to show now playing movies
       });
 
       const botMessage = {
-        message: response.data.gpt_response, // Odpowiedź od GPT
+        message: response.data.gpt_response, // Response from GPT
         isUser: false
       };
 
@@ -35,7 +35,7 @@ const Chat = () => {
       console.error('Error sending message:', error);
     }
 
-    setInput(''); // Wyczyść pole wejściowe
+    setInput(''); // Clear input field
   };
 
   return (
