@@ -1,0 +1,38 @@
+@font-face {
+    font-family: BroadwayFlat;
+    src: url(../fonts/BroadwayFlat.ttf);
+  }
+  @font-face {
+    font-family: Broadway3D;
+    src: url(../fonts/Broadway3D.ttf);
+  }
+  
+  .navbar {
+    background-color: #9F0303;
+    width: 200px;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+  }
+  
+  .navbar h2 {
+    margin-top: 0;
+    color: #DCBE55;
+    font-family: Broadway3D, sans-serif;
+    font-size: 4.5rem; /* Use relative units */
+    text-shadow: -0.15rem -0.15rem 0 #000, 0.15rem -0.15rem 0 #000, -0.15rem 0.15rem 0 #000, 0.15rem 0.15rem 0 #000;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    padding: 0;
+    color: #F5EEDC;
+    font-family: BroadwayFlat, sans-serif;
+    font-size: 3rem; /* Use relative units */
+    text-shadow: -0.1rem -0.1rem 0 #000, 0.1rem -0.1rem 0 #000, -0.1rem 0.1rem 0 #000, 0.1rem 0.1rem 0 #000; /* Thicker black border effect */
+  }
+  
+  .navbar ul li {
+    margin: 10px 0;
+  }
