@@ -4,3 +4,4 @@ db.sqlite3
 backend/api/__pycache__/
 backend/api/migrations/
 backend/backend/__pycache__/
+backend/OpenAI/__pycache__/

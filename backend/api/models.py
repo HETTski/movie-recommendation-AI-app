@@ -44,4 +44,4 @@ class Movie(models.Model):
         db_table = 'movies'  # Ustaw nazwę tabeli na 'movies'
 
     def __str__(self):
-        return self.name
+        return self.title
