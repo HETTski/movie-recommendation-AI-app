@@ -1,5 +1,7 @@
 import requests
 import openai
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
 from config import TMDB_API_KEY, OPENAI_API_KEY
 
 # Configure OpenAI API
@@ -27,6 +29,13 @@ GENRE_IDS = {
     "war": 10752,
     "western": 37
 }
+
+app = Flask(__name__)
+
+# Enable CORS
+CORS(app)  # Allow all origins
+# Alternatively, restrict to specific origins:
+# CORS(app, resources={r"/chat": {"origins": "http://localhost:3000"}})
 
 def get_movie_recommendations(genres):
     """
@@ -91,7 +100,10 @@ def chatbot_conversation(user_input, show_now_playing=False):
         if genre_name in user_input.lower():
             genres.append(genre_id)
 
-    recommendations = ""
+    recommendations = {
+        "gpt_response": gpt_response,
+        "movie_recommendations": []
+    }
     
     # Step 3: Show "Now Playing" movies if requested
     if show_now_playing:
@@ -99,32 +111,50 @@ def chatbot_conversation(user_input, show_now_playing=False):
         if genres:
             now_playing_movies = filter_movies_by_genre(now_playing_movies, genres)
         if now_playing_movies:
-            recommendations += "Here are some movies currently playing in theaters:\n"
-            recommendations += "\n".join([f"{movie['title']} - {movie['overview'][:100]}..." for movie in now_playing_movies[:5]])
-            recommendations += "\n\n"
+            recommendations["movie_recommendations"].append({
+                "title": "Now Playing Movies",
+                "movies": [{"title": movie['title'], "overview": movie['overview'][:100]} for movie in now_playing_movies[:5]]
+            })
         else:
-            recommendations += "No 'now playing' movies match your genre preferences.\n\n"
+            recommendations["movie_recommendations"].append({
+                "title": "No 'now playing' movies match your genre preferences.",
+                "movies": []
+            })
 
     # Step 4: Show popular movies based on specified genres
     if genres:
         genre_based_movies = get_movie_recommendations(genres)
         if genre_based_movies:
-            recommendations += "Here are some popular movies based on your genre preferences:\n"
-            recommendations += "\n".join([f"{movie['title']} - {movie['overview'][:100]}..." for movie in genre_based_movies[:5]])
+            recommendations["movie_recommendations"].append({
+                "title": "Popular Movies Based on Your Genres",
+                "movies": [{"title": movie['title'], "overview": movie['overview'][:100]} for movie in genre_based_movies[:5]]
+            })
         else:
-            recommendations += "No popular movies match your genre preferences."
+            recommendations["movie_recommendations"].append({
+                "title": "No popular movies match your genre preferences.",
+                "movies": []
+            })
     else:
         # Fallback if no genres were specified
-        recommendations += "Please specify some genres to get popular movie recommendations."
+        recommendations["movie_recommendations"].append({
+            "title": "Please specify some genres to get popular movie recommendations.",
+            "movies": []
+        })
 
     return recommendations
 
 
-# Example conversation
-if __name__ == "__main__":
-    user_input = input("Enter your movie preferences: ")
-    now_playing_choice = input("Do you want to see movies that are now playing in theaters? (yes/no): ").strip().lower()
-    show_now_playing = now_playing_choice == "yes"
-    
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_input = data.get('message')
+    show_now_playing = data.get('show_now_playing', False)
+
+    # Get chatbot response and movie recommendations
     chatbot_response = chatbot_conversation(user_input, show_now_playing=show_now_playing)
-    print("Chatbot:", chatbot_response)
+
+    return jsonify(chatbot_response)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
