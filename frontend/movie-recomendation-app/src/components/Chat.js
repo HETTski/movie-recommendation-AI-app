@@ -25,10 +25,12 @@ const Chat = () => {
         isUser: false
       };
 
-      const movieMessages = response.data.movie_recommendations.map((recommendation, index) => ({
-        message: `${recommendation.title}\n${recommendation.movies.map(movie => `${movie.title}: ${movie.overview}`).join("\n")}`,
-        isUser: false
-      }));
+      const movieMessages = response.data.movie_recommendations
+        ? response.data.movie_recommendations.map((movie, index) => ({
+            message: `${movie.title}: ${movie.overview}`,
+            isUser: false
+          }))
+        : [];
 
       setMessages((prevMessages) => [...prevMessages, userMessage, botMessage, ...movieMessages]);
     } catch (error) {
