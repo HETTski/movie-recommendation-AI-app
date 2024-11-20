@@ -9,7 +9,7 @@ const Navbar = () => {
         <li>Home</li>
         <li>Chat</li>
         <li>About</li>
-        <li>Contact</li>
+        <li>Account</li>
       </ul>
     </div>
   );

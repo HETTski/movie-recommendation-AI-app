@@ -3,6 +3,7 @@
   display: flex;
   height: 100vh;
   background-color: #1C1C17;
+  overflow: hidden;
 }
 
 .App-logo {
@@ -110,7 +111,7 @@ input[type="text"] {
 button {
   padding: 10px 20px;
   border: none;
-  background-color: #007bff;
+  background-color: #9F0303;
   color: white;
   border-radius: 5px;
   cursor: pointer;
@@ -118,7 +119,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #690b0b;
 }
 
 .messages {

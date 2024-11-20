@@ -3,25 +3,44 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 60%;
-  margin: auto;
+  width: calc(100% - 220px); /* Adjust width to account for the navbar */
   margin-left: 220px; /* Add margin to account for the navbar width */
   border: 1px solid #ccc;
   border-radius: 10px;
   overflow: hidden;
   background-color: #1C1C17;
+  position: relative; /* Ensure the pseudo-element is positioned correctly */
+}
+
+.chat-container::before {
+  content: '';
+  position: absolute;
+  top: 75%;
+  left: 75%;
+  width: 100%; /* Make the image smaller */
+  height: 100%; /* Make the image smaller */
+  background-image: url('../images/popcorn.png');
+  background-size: contain; /* Ensure the image is fully visible */
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.15; /* 30% opacity */
+  transform: translate(-50%, -50%) rotate(-45deg); /* Center the image and rotate 45 degrees to the left */
+  z-index: 0; /* Ensure the image is behind the content */
 }
 
 .messages {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  z-index: 1; /* Ensure the messages are above the background image */
 }
 
 .input-container {
   display: flex;
   padding: 10px;
   border-top: 1px solid #ccc;
+  z-index: 1; /* Ensure the input container is above the background image */
+  margin-bottom: 1rem;
 }
 
 input {
@@ -40,6 +59,7 @@ button {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  height: 2.5rem;
 }
 
 button:hover {

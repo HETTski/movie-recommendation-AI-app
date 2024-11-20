@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Message from './Message';
 import './Chat.css';
+import popcornImage from '../images/popcorn.png';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -13,6 +14,7 @@ const Chat = () => {
 
     const userMessage = { message: input, isUser: true };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setInput(''); // Clear input field immediately
 
     try {
       const response = await axios.post('http://localhost:5000/chat', {
@@ -27,17 +29,22 @@ const Chat = () => {
 
       const movieMessages = response.data.movie_recommendations
         ? response.data.movie_recommendations.map((movie, index) => ({
-            message: `${movie.title}: ${movie.overview}`,
+            message: `${movie.title}: ${movie.movies.map(m => `${m.title}: ${m.overview}`).join("\n")}`,
             isUser: false
           }))
         : [];
 
-      setMessages((prevMessages) => [...prevMessages, userMessage, botMessage, ...movieMessages]);
+      setMessages((prevMessages) => [...prevMessages, botMessage, ...movieMessages]);
     } catch (error) {
       console.error('Error sending message:', error);
     }
+  };
 
-    setInput(''); // Clear input field
+  // Function to handle key press
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
   };
 
   return (
@@ -52,6 +59,7 @@ const Chat = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyPress} // Add event listener for key press
           placeholder="Type your message..."
         />
         <button onClick={handleSend}>Send</button>

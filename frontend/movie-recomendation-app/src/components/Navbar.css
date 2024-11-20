@@ -10,8 +10,9 @@
   .navbar {
     background-color: #9F0303;
     width: 200px;
-    height: 100vh;
+    height: 100%;
     padding: 20px;
+    border-radius: 0% 5% 5% 0%   ;
     box-sizing: border-box;
     position: fixed;
   }
