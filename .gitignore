@@ -6,4 +6,4 @@ backend/api/migrations/
 backend/backend/__pycache__/
 backend/OpenAI/__pycache__/
 backend/OpenAI/venv
-.Identifier
+*.Identifier
