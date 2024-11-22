@@ -37,3 +37,17 @@
   transform: translate(-50%, -50%) rotate(-45deg); /* Rotate 45 degrees to the left */
   z-index: -1; /* Ensure the image is behind the text */
 }
+
+.add-to-db-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.add-to-db-btn:hover {
+  background-color: #0056b3;
+}

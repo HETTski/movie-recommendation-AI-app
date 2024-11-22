@@ -33,7 +33,7 @@ const Chat = () => {
       const responseText = response.data.recommendations;
       
       // Add the header as a bot message
-      setMessages((prevMessages) => [...prevMessages, { message: responseText.split(':')[0].trim(), isUser: false }]);
+      setMessages((prevMessages) => [...prevMessages, { message: responseText.split(':')[0]+":", isUser: false }]);
   
       // Process and add movies to the messages
       
@@ -42,7 +42,7 @@ const Chat = () => {
         if (index > 0) { // Avoid empty strings
           setMessages((prevMessages) => [
             ...prevMessages,
-            { message: `${index}. ${movie.trim()}`, isUser: false },
+            { message: `${index}. ${movie.trim()}`, isUser: false, movie: movie.split('"')[1]},
           ]);
         }
       });
@@ -58,11 +58,45 @@ const Chat = () => {
     setInput('');
   };
 
+  const handleAddToDb = async (movie) => {
+    try {
+      const payload = {
+        title: movie,
+        description: '',
+        sites: []
+      };
+
+      console.log("Hello!");
+  
+      const response = await axios.post(
+        'http://localhost:8000/api/user/movies/add/',
+        payload,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : '',
+          },
+        }
+      );
+  
+      alert(`Movie: "${movie}" was added to db!`);
+    } catch (error) {
+      console.error('Error adding movie to DB:', error);
+      alert('Error adding movie to DB.');
+    }
+  };
+
   return (
     <div className="chat-container">
       <div className="messages">
         {messages.map((msg, index) => (
-          <Message key={index} message={msg.message} isUser={msg.isUser} />
+          <Message
+            key={index}
+            message={msg.message}
+            isUser={msg.isUser}
+            onAddToDb={
+              msg.movie ? () => handleAddToDb(msg.movie) : null
+            }
+          />
         ))}
       </div>
       <div className="input-container">
