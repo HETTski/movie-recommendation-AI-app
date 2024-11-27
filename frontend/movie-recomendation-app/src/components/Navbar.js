@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn, onLoginClick, onLogout }) => {
   return (
     <div className="navbar">
       <h2>Movie AI</h2>
@@ -11,6 +11,13 @@ const Navbar = () => {
         <li>About</li>
         <li>Contact</li>
       </ul>
+      <div className="auth-buttons">
+        {isLoggedIn ? (
+          <button onClick={onLogout}>Logout</button>
+        ) : (
+          <button onClick={onLoginClick}>Login</button>
+        )}
+      </div>
     </div>
   );
 };
