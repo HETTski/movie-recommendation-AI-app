@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navbar.css';
 
-const Navbar = ({ isLoggedIn, onLoginClick, onLogout }) => {
+const Navbar = ({ isLoggedIn, onLoginClick, onLogout, onRegisterClick, onMoviesShow }) => {
   return (
     <div className="navbar">
       <h2>Movie AI</h2>
@@ -13,9 +13,18 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout }) => {
       </ul>
       <div className="auth-buttons">
         {isLoggedIn ? (
-          <button onClick={onLogout}>Logout</button>
+          <>
+            <button onClick={onMoviesShow}>Movies List</button>
+            <p></p>
+            <button onClick={onLogout}>Logout</button>
+          </>
+          
         ) : (
-          <button onClick={onLoginClick}>Login</button>
+          <>
+            <button onClick={onLoginClick}>Login</button>
+            <p></p>
+            <button onClick={onRegisterClick}>Register</button>
+          </>
         )}
       </div>
     </div>
