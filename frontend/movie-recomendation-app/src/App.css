@@ -110,7 +110,7 @@ input[type="text"] {
 button {
   padding: 10px 20px;
   border: none;
-  background-color: #007bff;
+  background-color: #9F0303;
   color: white;
   border-radius: 5px;
   cursor: pointer;
@@ -118,7 +118,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #530c0c;
 }
 
 .messages {
