@@ -39,7 +39,7 @@
 }
 
 .add-to-db-btn {
-  background-color: #007bff;
+  background-color: #9F0303;
   color: #fff;
   border: none;
   padding: 5px 10px;
@@ -49,5 +49,5 @@
 }
 
 .add-to-db-btn:hover {
-  background-color: #0056b3;
+  background-color: #530c0c;
 }

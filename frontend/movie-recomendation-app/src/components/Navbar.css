@@ -1,38 +1,101 @@
 @font-face {
-    font-family: BroadwayFlat;
-    src: url(../fonts/BroadwayFlat.ttf);
-  }
-  @font-face {
-    font-family: Broadway3D;
-    src: url(../fonts/Broadway3D.ttf);
-  }
-  
+  font-family: BroadwayFlat;
+  src: url(../fonts/BroadwayFlat.ttf);
+}
+
+@font-face {
+  font-family: Broadway3D;
+  src: url(../fonts/Broadway3D.ttf);
+}
+
+/* Navbar container */
+.navbar {
+  background-color: #530c0c; /* Dark red background */
+  width: 200px;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed;
+}
+
+/* Navbar heading */
+.navbar h2 {
+  margin-top: 0;
+  color: #DCBE55;
+  font-family: Broadway3D, sans-serif;
+  font-size: 4.5rem; /* Relative units */
+  text-shadow: -0.15rem -0.15rem 0 #000, 0.15rem -0.15rem 0 #000, -0.15rem 0.15rem 0 #000, 0.15rem 0.15rem 0 #000;
+}
+
+/* Navbar menu */
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+  color: #F5EEDC;
+  font-family: BroadwayFlat, sans-serif;
+  font-size: 2.5rem; /* Relative units */
+  text-shadow: -0.1rem -0.1rem 0 #000, 0.1rem -0.1rem 0 #000, -0.1rem 0.1rem 0 #000, 0.1rem 0.1rem 0 #000;
+}
+
+.navbar ul li {
+  margin: 15px 0;
+}
+
+/* Auth buttons container */
+.auth-buttons {
+  margin-top: 10rem;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 10px; /* Space between buttons */
+}
+
+/* Button styling */
+.navbarButton {
+  background-color: #9F0303; /* Brighter red for default button state */
+  color: #F5EEDC;
+  font-family: BroadwayFlat, sans-serif;
+  font-size: 2rem; /* Relative units */
+  text-shadow: -0.1rem -0.1rem 0 #000, 0.1rem -0.1rem 0 #000, -0.1rem 0.1rem 0 #000, 0.1rem 0.1rem 0 #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%; /* Full width */
+  box-sizing: border-box; /* Include padding in width */
+  text-align: center;
+  transition: background-color 0.3s ease; /* Smooth color transition on hover */
+}
+
+/* Hover effect for buttons */
+.navbarButton:hover {
+  background-color: #530c0c; /* Darker red when hovered */
+}
+
+/* Ensure hover size fits exactly inside the navbar */
+.button-container .navbarButton {
+  width: calc(100% - 10px); /* Account for padding to fit navbar size */
+  margin: 0 auto; /* Center within parent */
+}
+
+/* Responsiveness */
+@media (max-width: 600px) {
   .navbar {
-    background-color: #9F0303;
-    width: 200px;
-    height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-    position: fixed;
+    width: 150px;
   }
-  
+
   .navbar h2 {
-    margin-top: 0;
-    color: #DCBE55;
-    font-family: Broadway3D, sans-serif;
-    font-size: 4.5rem; /* Use relative units */
-    text-shadow: -0.15rem -0.15rem 0 #000, 0.15rem -0.15rem 0 #000, -0.15rem 0.15rem 0 #000, 0.15rem 0.15rem 0 #000;
+    font-size: 3.5rem;
   }
-  
-  .navbar ul {
-    list-style-type: none;
-    padding: 0;
-    color: #F5EEDC;
-    font-family: BroadwayFlat, sans-serif;
-    font-size: 3rem; /* Use relative units */
-    text-shadow: -0.1rem -0.1rem 0 #000, 0.1rem -0.1rem 0 #000, -0.1rem 0.1rem 0 #000, 0.1rem 0.1rem 0 #000; /* Thicker black border effect */
-  }
-  
+
   .navbar ul li {
-    margin: 10px 0;
+    font-size: 2rem;
   }
+
+  .navbarButton {
+    font-size: 1.5rem;
+  }
+}
