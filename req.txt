@@ -9,5 +9,4 @@ sqlparse
 psycopg2-binary
 python-dotenv
 requests
-openai
-python-dotenv
+openai==0.28
