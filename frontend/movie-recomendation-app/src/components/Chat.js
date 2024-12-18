@@ -6,6 +6,7 @@ import './Chat.css';
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const isLoggedIn = !!localStorage.getItem('token'); // Check if the user is logged in
 
   // Function to send messages
   const handleSend = async () => {
@@ -101,6 +102,7 @@ const Chat = () => {
             onAddToDb={
               msg.movie ? () => handleAddToDb(msg.movie) : null
             }
+            isLoggedIn={isLoggedIn} // Pass the isLoggedIn prop
           />
         ))}
       </div>
