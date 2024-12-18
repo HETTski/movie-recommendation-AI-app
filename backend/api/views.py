@@ -1,14 +1,12 @@
 from django.shortcuts import render
-#from django.contrib.auth.models import User
 from .models import CustomUser, Movie
 from rest_framework import generics, status
 from .serializers import UserSerializer, MovieSerializer, AddMovieSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from OpenAI.main import get_movie_recommendations, chatbot_conversation
+from OpenAI.main import get_movie_recommendations, chatbot_conversation, get_now_playing_movies
 
-# Create your views here.
 class CreateUserView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.raw('SELECT * FROM users')
     serializer_class = UserSerializer
@@ -85,28 +83,32 @@ class MovieRecommendationView(APIView):
 
     def post(self, request):
         use_movie_db = request.data.get('use_db', False)
-
+        watched_movies = []  # List of movie IDs the user has watched
         if request.user.is_authenticated:
             movie_ids = request.user.movies
             if movie_ids:
-                watched_movies = []  # List of movie IDs the user has watched
                 moviesArray = Movie.objects.filter(id__in=movie_ids)
                 for m in moviesArray:
                     watched_movies.append(m.title)
         else:
             watched_movies = request.data.get('watched_movies', [])
-            if(len(watched_movies)):
+            if len(watched_movies):
                 use_movie_db = True
+
         query = request.data.get('query', "Can you recommend a movie for me?")
         
         # Build the initial conversation context
-        if(use_movie_db):
-            conversation_context = f"Based on the movies {watched_movies}, recommend some similar movies. {query}"
+        if 'now playing' in query.lower() or 'currently playing' in query.lower():
+            conversation_context = f"Show me some movies currently playing in theaters. {query}"
+            now_playing_movies = get_now_playing_movies()
+            recommendations = "\n".join([f"{movie['title']} - {movie['overview'][:100]}..." for movie in now_playing_movies[:5]])
+            conversation_context += f"\nHere are some movies currently playing in theaters:\n{recommendations}"
+        elif use_movie_db:
+            conversation_context = f"Based on the movies {watched_movies}, recommend some similar movies. {query}. Please show titles in "" marks not in ''."
         else:
-            conversation_context = f"Recommend some movies. {query}"
+            conversation_context = f"Recommend some movies. {query} . "
 
         # Call the conversational function instead
         response = chatbot_conversation(conversation_context)
         
         return Response({"recommendations": response}, status=200)
-   

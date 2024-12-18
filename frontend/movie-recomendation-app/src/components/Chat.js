@@ -10,10 +10,11 @@ const Chat = () => {
   // Function to send messages
   const handleSend = async () => {
     if (input.trim() === '') return;
-  
+
     const userMessage = { message: input, isUser: true };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-  
+    setInput(''); // Clear input field immediately
+
     try {
       const payload = {
         query: input,
@@ -22,31 +23,30 @@ const Chat = () => {
           : [],
         use_db: localStorage.getItem('token') ? true : false,
       };
-  
+
       const response = await axios.post('http://localhost:8000/api/movies/recommendations/', payload, {
         headers: {
           Authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : '',
         },
       });
-  
+
       // Split the response into header and movies
       const responseText = response.data.recommendations;
       
       // Add the header as a bot message
       setMessages((prevMessages) => [...prevMessages, { message: responseText.split(':')[0]+":", isUser: false }]);
-  
+
       // Process and add movies to the messages
-      
-      const movieList = responseText.split(":").filter((e, id) => id>0).join(":").split(/\d+\./);
+      const movieList = responseText.split(":").filter((e, id) => id > 0).join(":").split(/\d+\./);
       movieList.forEach((movie, index) => {
         if (index > 0) { // Avoid empty strings
           setMessages((prevMessages) => [
             ...prevMessages,
-            { message: `${index}. ${movie.trim()}`, isUser: false, movie: movie.split('"')[1]},
+            { message: `${index}. ${movie.trim()}`, isUser: false, movie: movie.split('"')[1] },
           ]);
         }
       });
-      
+
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages((prevMessages) => [
@@ -54,8 +54,13 @@ const Chat = () => {
         { message: 'An error occurred while fetching recommendations.', isUser: false },
       ]);
     }
-  
-    setInput('');
+  };
+
+  // Function to handle key press
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
   };
 
   const handleAddToDb = async (movie) => {
@@ -67,7 +72,7 @@ const Chat = () => {
       };
 
       console.log("Hello!");
-  
+
       const response = await axios.post(
         'http://localhost:8000/api/user/movies/add/',
         payload,
@@ -77,7 +82,7 @@ const Chat = () => {
           },
         }
       );
-  
+
       alert(`Movie: "${movie}" was added to db!`);
     } catch (error) {
       console.error('Error adding movie to DB:', error);
@@ -104,6 +109,7 @@ const Chat = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyPress} // Add event listener for key press
           placeholder="Type your message..."
         />
         <button onClick={handleSend}>Send</button>
