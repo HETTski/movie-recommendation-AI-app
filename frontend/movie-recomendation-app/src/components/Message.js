@@ -2,12 +2,20 @@ import React from 'react';
 import './Message.css';
 
 const Message = ({ message, isUser, onAddToDb }) => {
+  // Function to extract text within quotes (either single or double)
+  const extractQuotedText = (text) => {
+    const match = text.match(/["']([^"']+)["']/);
+    return match ? match[1] : '';
+  };
+
+  const quotedText = extractQuotedText(message);
+
   return (
     <div className={`message ${isUser ? 'user' : 'bot'}`}>
       {message}
-      {!isUser && localStorage.getItem("token") && Number(message[0]) && (
-        <button className="add-to-db-btn" onClick={onAddToDb}>
-          Add to db "{message.split('"')[1]}"
+      {!isUser && quotedText && (
+        <button onClick={onAddToDb}>
+          Add to db "{quotedText}"
         </button>
       )}
     </div>
